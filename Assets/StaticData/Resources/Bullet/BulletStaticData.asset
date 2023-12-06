@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BulletStaticData
   m_EditorClassIdentifier: 
   <LifeTime>k__BackingField: 10
-  <Force>k__BackingField: 110
+  <Force>k__BackingField: 150
   Configs:
   - _inspectorName: BulletRed
     <Id>k__BackingField: 1

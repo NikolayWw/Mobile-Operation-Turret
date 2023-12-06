@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 4536491254940113233}
   - component: {fileID: 6555189128573497887}
   - component: {fileID: 7674747475732663517}
-  - component: {fileID: 6292973323263763779}
+  - component: {fileID: 3603201218519436119}
   m_Layer: 0
   m_Name: BaseEnemy
   m_TagString: Untagged
@@ -307,7 +307,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 3
---- !u!54 &6292973323263763779
+--- !u!54 &3603201218519436119
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -329,8 +329,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0

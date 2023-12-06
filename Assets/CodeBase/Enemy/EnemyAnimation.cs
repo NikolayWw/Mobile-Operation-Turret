@@ -33,12 +33,12 @@ namespace CodeBase.Enemy
         }
 
         private void UpdateMove() =>
-            _animator.SetFloat(RunningHash, _agent.velocity.magnitude > 0.4f ? 1 : 0, 0.1f, Time.deltaTime); //trigger magnitude
+            _animator.SetBool(RunningHash, _agent.velocity.magnitude > 0.4f); //trigger magnitude
 
         private void Freeze()
         {
             enabled = false;
-            _animator.SetFloat(RunningHash, 0);
+            _animator.SetBool(RunningHash, false);
         }
     }
 }

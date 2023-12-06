@@ -6,13 +6,10 @@ namespace CodeBase.Bullet
 {
     public class BulletApplyDamage : MonoBehaviour
     {
-        private bool _triggered;
+        [SerializeField] private BulletObjectPool _bulletObjectPool;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_triggered)
-                return;
-
             if (other.isTrigger)
                 return;
 
@@ -22,13 +19,8 @@ namespace CodeBase.Bullet
                 && applyDamage.GetType() != typeof(CarHealth))
             {
                 applyDamage.ApplyDamage(0);
-                _triggered = true;
+                _bulletObjectPool.Disable();
             }
-        }
-
-        private void OnDisable()
-        {
-            _triggered = false;
         }
     }
 }
