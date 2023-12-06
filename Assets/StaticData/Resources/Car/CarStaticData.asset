@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd644677ddb85842a2ea7828304129f, type: 3}
+  m_Name: CarStaticData
+  m_EditorClassIdentifier: 
+  CarConfig:
+    <Prefab>k__BackingField: {fileID: 2040102175421797192, guid: 53a4ac11adccffe4499b1092c620f390, type: 3}
+    <ForwardSpeed>k__BackingField: 20
+    <StartHealth>k__BackingField: 10
+  TurretConfig:
+    <TurretRotateSpeed>k__BackingField: 40
+    <IntensityRotate>k__BackingField: 0.12
+    <IntervalShoot>k__BackingField: 0.3
+    <LimitedYFrom>k__BackingField: -70
+    <LimitedYTo>k__BackingField: 70
+  CameraConfig:
+    <CameraBrainPrefab>k__BackingField: {fileID: 5179489272831673169, guid: 938a0c3ff5cd1564eac28f5009bbb8ca, type: 3}
