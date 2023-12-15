@@ -11,8 +11,6 @@ namespace CodeBase.Infrastructure
             var bootstrapper = FindObjectOfType<Bootstrapper>();
             if (bootstrapper == null)
                 Instantiate(_bootstrapper);
-
-            Destroy(gameObject);
         }
     }
 }
