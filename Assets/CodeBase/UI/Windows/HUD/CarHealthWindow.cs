@@ -1,7 +1,6 @@
 ﻿using CodeBase.Player.Car;
 using CodeBase.Services.Factory;
 using CodeBase.Services.StaticData;
-using CodeBase.UI.Services.Factory;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +16,7 @@ namespace CodeBase.UI.Windows.HUD
         {
             _startHealth = dataService.CarStaticData.CarConfig.StartHealth;
             _carHealth = gameFactory.Car.GetComponent<CarHealth>();
+
             _carHealth.OnValueChange += Refresh;
         }
 

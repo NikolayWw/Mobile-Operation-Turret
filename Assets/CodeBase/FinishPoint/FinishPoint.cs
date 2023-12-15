@@ -1,5 +1,6 @@
 ﻿using CodeBase.Services.GameObserver;
 using CodeBase.UI.Services.Factory;
+using System.Collections;
 using UnityEngine;
 
 namespace CodeBase.FinishPoint
@@ -15,13 +16,14 @@ namespace CodeBase.FinishPoint
         {
             _uiFactory = uiFactory;
             _gameObserverService = gameObserverService;
-            _triggerReporter.OnCarEnter += SendFinish;
+            _triggerReporter.OnCarEnter += () => StartCoroutine(SendFinish());
         }
 
-        private void SendFinish()
+        private IEnumerator SendFinish()
         {
-            _uiFactory.CreateWinWindow();
             _gameObserverService.SendPlayerWin();
+            yield return null;
+            _uiFactory.CreateWinWindow();
         }
     }
 }

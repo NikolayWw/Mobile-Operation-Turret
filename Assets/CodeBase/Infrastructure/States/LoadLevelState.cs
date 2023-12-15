@@ -1,5 +1,6 @@
 using CodeBase.Data;
 using CodeBase.Infrastructure.Logic;
+using CodeBase.Services;
 using CodeBase.Services.Cleanup;
 using CodeBase.Services.Factory;
 using CodeBase.Services.LogicFactory;
@@ -12,38 +13,21 @@ namespace CodeBase.Infrastructure.States
 {
     public class LoadLevelState : IPayloadState<string>
     {
-        private readonly IGameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly LoadCurtain _loadingCurtain;
-        private readonly IGameFactory _gameFactory;
-        private readonly IUIFactory _uiFactory;
-        private readonly ICleanupService _cleanupService;
-        private readonly ILogicFactory _logicFactory;
-        private readonly IStaticDataService _dataService;
+        private readonly AllServices _allServices;
 
-        public LoadLevelState(IGameStateMachine stateMachine,
-            SceneLoader sceneLoader,
-            LoadCurtain loadingCurtain,
-            IGameFactory gameFactory,
-            IUIFactory uiFactory,
-            ICleanupService cleanupService,
-            ILogicFactory logicFactory,
-            IStaticDataService dataService)
+        public LoadLevelState(SceneLoader sceneLoader, LoadCurtain loadingCurtain, AllServices allServices)
         {
-            _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
             _loadingCurtain = loadingCurtain;
-            _gameFactory = gameFactory;
-            _uiFactory = uiFactory;
-            _cleanupService = cleanupService;
-            _logicFactory = logicFactory;
-            _dataService = dataService;
+            _allServices = allServices;
         }
 
         public void Enter(string sceneName)
         {
             _loadingCurtain.Show();
-            _cleanupService.Cleanup();
+            GetService<ICleanupService>().Cleanup();
 
             if (CurrentSceneKey() != GameConstants.ReloadSceneKey)
                 _sceneLoader.Load(GameConstants.ReloadSceneKey, () => _sceneLoader.Load(sceneName, OnLoaded));
@@ -58,24 +42,33 @@ namespace CodeBase.Infrastructure.States
 
         private void OnLoaded()
         {
-            LevelStaticData levelData = _dataService.LevelData;
+            IStaticDataService dataService = GetService<IStaticDataService>();
+            IGameFactory gameFactory = GetService<IGameFactory>();
+            IUIFactory uiFactory = GetService<IUIFactory>();
+            ILogicFactory logicFactory = GetService<ILogicFactory>();
+            IGameStateMachine gameStateMachine = GetService<IGameStateMachine>();
+
+            LevelStaticData levelData = dataService.LevelData;
             UnityEngine.Camera mainCamera = UnityEngine.Camera.main;
 
-            _gameFactory.InitGameScene(mainCamera);
-            _uiFactory.CreateUIRoot();
-            _logicFactory.InitializeEnemySpawner();
+            gameFactory.InitGameScene(mainCamera);
+            uiFactory.CreateUIRoot();
+            logicFactory.InitializeEnemySpawner();
 
-            _logicFactory.EnemySpawner.Spawn();
-            _gameFactory.CreatePlayer(levelData.PlayerInitialPoint);//start position
-            _gameFactory.CreateFinish(levelData.FinishPointPosition);
+            logicFactory.EnemySpawner.Spawn();
+            gameFactory.CreatePlayer(levelData.PlayerInitialPoint);
+            gameFactory.CreateFinish(levelData.FinishPointPosition);
 
-            _uiFactory.CreateHUD();
-            _uiFactory.CreateStartGameWindow();
+            uiFactory.CreateHUD();
+            uiFactory.CreateStartGameWindow();
 
-            _stateMachine.Enter<LoopState>();
+            gameStateMachine.Enter<LoopState>();
         }
 
         private static string CurrentSceneKey() =>
             SceneManager.GetActiveScene().name;
+
+        private TService GetService<TService>() where TService : IService =>
+            _allServices.Single<TService>();
     }
 }

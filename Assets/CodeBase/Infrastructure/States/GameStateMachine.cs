@@ -1,12 +1,7 @@
 using CodeBase.Infrastructure.Logic;
 using CodeBase.Services;
-using CodeBase.Services.Cleanup;
-using CodeBase.Services.Factory;
-using CodeBase.UI.Services.Factory;
 using System;
 using System.Collections.Generic;
-using CodeBase.Services.LogicFactory;
-using CodeBase.Services.StaticData;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -19,14 +14,9 @@ namespace CodeBase.Infrastructure.States
         {
             _states = new Dictionary<Type, IExitable>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, loadCurtain,
-                    services.Single<IGameFactory>(),
-                    services.Single<IUIFactory>(),
-                    services.Single<ICleanupService>(),
-                    services.Single<ILogicFactory>(),
-                    services.Single<IStaticDataService>()),
-
+                [typeof(RegisterServiceState)] = new RegisterServiceState(this, services),
+                [typeof(WarmupState)] = new WarmupState(services),
+                [typeof(LoadLevelState)] = new LoadLevelState(sceneLoader, loadCurtain, services),
                 [typeof(LoopState)] = new LoopState(),
             };
         }

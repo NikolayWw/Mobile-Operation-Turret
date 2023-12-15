@@ -11,6 +11,7 @@ namespace CodeBase.Infrastructure.Logic
 
         private readonly CanvasGroup _curtainPrefab;
         private readonly ICoroutineRunner _coroutine;
+        private bool _curtainShow;
 
         public LoadCurtain(ICoroutineRunner coroutine)
         {
@@ -20,7 +21,11 @@ namespace CodeBase.Infrastructure.Logic
 
         public void Show()
         {
-            _loadCurtain = Object.Instantiate(_curtainPrefab);
+            if (_curtainShow == false)
+            {
+                _loadCurtain = Object.Instantiate(_curtainPrefab);
+                _curtainShow = true;
+            }
         }
 
         public void Hide()
@@ -32,11 +37,12 @@ namespace CodeBase.Infrastructure.Logic
         {
             do
             {
-                _loadCurtain.alpha -= 0.04f;
+                _loadCurtain.alpha -= Time.deltaTime * 2f;
                 yield return null;
             } while (_loadCurtain.alpha > 0.0f);
 
             Object.Destroy(_loadCurtain.gameObject);
+            _curtainShow = false;
         }
     }
 }

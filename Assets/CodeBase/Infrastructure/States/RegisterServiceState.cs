@@ -1,4 +1,3 @@
-using CodeBase.Infrastructure.Logic;
 using CodeBase.Services;
 using CodeBase.Services.Cleanup;
 using CodeBase.Services.Factory;
@@ -7,28 +6,24 @@ using CodeBase.Services.Input;
 using CodeBase.Services.LogicFactory;
 using CodeBase.Services.StaticData;
 using CodeBase.UI.Services.Factory;
-using static CodeBase.Data.GameConstants;
 
 namespace CodeBase.Infrastructure.States
 {
-    public class BootstrapState : IState
+    public class RegisterServiceState : IState
     {
-        private readonly GameStateMachine _stateMachine;
-        private readonly SceneLoader _sceneLoader;
+        private readonly IGameStateMachine _stateMachine;
         private readonly AllServices _services;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices services)
+        public RegisterServiceState(IGameStateMachine stateMachine, AllServices services)
         {
             _stateMachine = stateMachine;
-            _sceneLoader = sceneLoader;
             _services = services;
-
-            RegisterServices();
         }
 
         public void Enter()
         {
-            _sceneLoader.Load(InitSceneKey, OnLoaded);
+            RegisterServices();
+            _stateMachine.Enter<WarmupState>();
         }
 
         public void Exit()
@@ -44,11 +39,6 @@ namespace CodeBase.Infrastructure.States
             _services.RegisterSingle<IGameObserverService>(new GameObserverService());
             _services.RegisterSingle<IInputService>(new InputService());
             _services.RegisterSingle<ICleanupService>(new CleanupService(_services.Single<ILogicFactory>(), _services.Single<IGameObserverService>()));
-        }
-
-        private void OnLoaded()
-        {
-            _stateMachine.Enter<LoadLevelState, string>(MainSceneKey);
         }
 
         private void RegisterStaticData()
